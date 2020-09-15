@@ -2,8 +2,7 @@ package battleship.core;
 
 /**
  * Board is the class that handles all the operations in the board
- *
- * @author Diógenes Dietrich de Morais
+ * 
  * @author Gustavo Reis Bauer
  * @since 1.0
  * @access public
@@ -39,7 +38,7 @@ public class Board {
 	 * @access private
 	 * 
 	 * */
-	private Point[][] board;
+	private final Point[][] board;
 
 	/**
 	 * Board is the constructor for the Board class, where the matrix gets started
@@ -97,65 +96,56 @@ public class Board {
 		final BoatOrientation orientation   = boat.getOrientation();
 		final Point initialPoint			= boat.getInitialPoint();
 		
-		if(!isValidPosition(initialPoint)) 
-			throw new InvalidPosition(initialPoint);
+		if(!isValidPosition(initialPoint)) throw new InvalidPosition(initialPoint);
 
 		switch(orientation) {
 			case HORIZONTAL:
-				for(int i = initialPoint.getX(); i < boatSize+initialPoint.getX(); i++) {
+				for(int i = initialPoint.getX(); i < boatSize + initialPoint.getX(); i++) {
 					if(this.board[initialPoint.getY()][i].isOccupied())
 						throw new AlreadyHaveBoat(this.board[initialPoint.getY()][i]);
-
 				}
 
-				for(int i = initialPoint.getX(); i < boatSize+initialPoint.getX(); i++) {
-					if(!isValidPosition(this.board[initialPoint.getY()][i]) || boatSize+initialPoint.getX()>ROWS)
+				for(int i = initialPoint.getX(); i < boatSize + initialPoint.getX(); i++) {
+					if(!isValidPosition(this.board[initialPoint.getY()][i]) || boatSize + initialPoint.getX()>ROWS)
 						throw new InvalidPosition(this.board[initialPoint.getY()][i]);
 
 					this.board[initialPoint.getY()][i].occupy();
 					this.board[initialPoint.getY()][i].setOrientation(BoatOrientation.HORIZONTAL);
 
-					if(i == boatSize+initialPoint.getX()-1 || i == initialPoint.getX()){
+					if(i == boatSize + initialPoint.getX() - 1 || i == initialPoint.getX())
 						this.board[initialPoint.getY()][i].setEdge();
-					}
 
-					if(i == initialPoint.getX()){
+					if(i == initialPoint.getX())
 						this.board[initialPoint.getY()][i].setFirst();
-					}
 				}
 
 				return true;
 
 			case VERTICAL:
-				for(int i = initialPoint.getY(); i < boatSize+initialPoint.getY(); i++) {
+				for(int i = initialPoint.getY(); i < boatSize + initialPoint.getY(); i++) {
 					if(this.board[i][initialPoint.getX()].isOccupied())
 						throw new AlreadyHaveBoat(this.board[initialPoint.getY()][i]);
 
 				}
 
-				for(int i = initialPoint.getY(); i < boatSize+initialPoint.getY(); i++) {
-					if(!isValidPosition(this.board[i][initialPoint.getX()]) || boatSize+initialPoint.getY()>COLS)
+				for(int i = initialPoint.getY(); i < boatSize + initialPoint.getY(); i++) {
+					if(!isValidPosition(this.board[i][initialPoint.getX()]) || boatSize + initialPoint.getY()>COLS)
 						throw new InvalidPosition(this.board[i][initialPoint.getX()]);
 
 					this.board[i][initialPoint.getX()].occupy();
 					this.board[i][initialPoint.getX()].setOrientation(BoatOrientation.VERTICAL);
 
-					if(i == boatSize+initialPoint.getY()-1 || i == initialPoint.getY()){
+					if(i == boatSize+initialPoint.getY() - 1 || i == initialPoint.getY())
 						this.board[i][initialPoint.getX()].setEdge();
-					}
 
-					if(i == initialPoint.getY()){
+					if(i == initialPoint.getY())
 						this.board[i][initialPoint.getX()].setFirst();
-					}
-
-
 				}
 
 				return true;
 				
 			case NONE:
-				if(!isValidPosition(initialPoint)) 
-					throw new InvalidPosition(initialPoint);
+				if(!isValidPosition(initialPoint)) throw new InvalidPosition(initialPoint);
 
 				if(this.board[initialPoint.getY()][initialPoint.getX()].isOccupied())
 					throw new AlreadyHaveBoat(this.board[initialPoint.getY()][initialPoint.getX()]);
@@ -164,13 +154,10 @@ public class Board {
 				this.board[initialPoint.getY()][initialPoint.getX()].setOrientation(BoatOrientation.NONE);
 
 				return true;
-				
 		}
-		
+
 		return false;
 	}
-	
-
 	
 	/**
 	 * shoot shoots a point of a player board
@@ -188,12 +175,10 @@ public class Board {
 	 *
 	 * */
 	public boolean shot(final Point point) throws InvalidPosition, ShootedPoint {
-		if(!isValidPosition(point))
-			throw new InvalidPosition(point);
+		if(!isValidPosition(point)) throw new InvalidPosition(point);
 
-		if(this.board[point.getY()][point.getX()].isShot()){
+		if(this.board[point.getY()][point.getX()].isShot())
 			throw new ShootedPoint(point);
-		}
 
 		this.board[point.getY()][point.getX()].shot();
 
@@ -209,59 +194,63 @@ public class Board {
 	 *
 	 * */
 	public void printBoard() {
-		System.out.println("      |  0  |  1  |  2  |  3  |  4  |  5  |  6  |  7  |  8  |  9  |");
+		System.out.print("      |");
+		for(int i = 0; i < 10; i++){
+			System.out.print("  " + i + "  |");
+		}
+		System.out.println();
 		for(int i = 0; i < this.board.length; i++) {
 			for(int j = 0; j < this.board[i].length; j++) {
-				if(j==0){
-					System.out.print("|  "+i+"  ");
+				if(j == 0){
+					System.out.print("|  " + i + "  ");
 				}
 
-				if(!this.board[i][j].isShot()){
-					System.out.printf("|  ~  ");
+				if(!this.board[i][j].isShot()) {
+					System.out.print("|  ~  ");
 					continue;
 				}
 
-				if(this.board[i][j].isShot() && !this.board[i][j].isOccupied()){
-					System.out.printf("|  ~  ");
+				if(this.board[i][j].isShot() && !this.board[i][j].isOccupied()) {
+					System.out.print("|  ~  ");
 					continue;
-
 				}
 
-				if(this.board[i][j].isOccupied() && this.board[i][j].isShot()){
-					if(this.board[i][j].getOrientation()==BoatOrientation.NONE){
-						System.out.printf("|  ◙  ");
+				if(this.board[i][j].isOccupied() && this.board[i][j].isShot()) {
+					if(this.board[i][j].getOrientation() == BoatOrientation.NONE) {
+						System.out.print("|  ◙  ");
 						continue;
 					}
+
 					if(!this.board[i][j].isEdge()){
-						System.out.printf("|  █  ");
+						System.out.print("|  █  ");
 						continue;
 					}
 
-					if(this.board[i][j].isEdge()){
-						switch(this.board[i][j].getOrientation()){
+					if(this.board[i][j].isEdge()) {
+						switch(this.board[i][j].getOrientation()) {
 							case HORIZONTAL:
-								if(this.board[i][j].isFirst()){
-									System.out.printf("|  ◄  ");
-								}
-								else{
-									System.out.printf("|  ►  ");
-								}
+
+								if(this.board[i][j].isFirst())
+									System.out.print("|  ◄  ");
+
+								else
+									System.out.print("|  ►  ");
+
 								break;
+
 							case VERTICAL:
-								if(this.board[i][j].isFirst()){
-									System.out.printf("|  ▲  ");
-								}
-								else{
-									System.out.printf("|  ▼  ");
-								}
+								if(this.board[i][j].isFirst())
+									System.out.print("|  ▲  ");
+
+								else
+									System.out.print("|  ▼  ");
+
 								break;
 						}
-
 					}
-
 				}
-
 			}
+
 			System.out.print("|");
 			System.out.println();
 		}
@@ -276,56 +265,60 @@ public class Board {
 	 *
 	 * */
 	public void printBoardWithBoats() {
-		System.out.println("      |  0  |  1  |  2  |  3  |  4  |  5  |  6  |  7  |  8  |  9  |");
+		System.out.print("      |");
+		for(int i = 0; i < 10; i++){
+			System.out.print("  " + i + "  |");
+		}
+		System.out.println();
 		for(int i = 0; i < this.board.length; i++) {
 			for(int j = 0; j < this.board[i].length; j++) {
-				if(j==0){
-					System.out.print("|  "+i+"  ");
-				}
 
-				if(!this.board[i][j].isOccupied()){
+				if(j == 0) System.out.print("|  " + i + "  ");
+
+				if(!this.board[i][j].isOccupied()) {
 					System.out.printf("|  ~  ");
 					continue;
 				}
 
-				if(this.board[i][j].isOccupied()){
-					if(this.board[i][j].getOrientation()==BoatOrientation.NONE){
-						System.out.printf("|  ◙  ");
-						continue;
-					}
-					if(!this.board[i][j].isEdge()){
-						System.out.printf("|  █  ");
+				if(this.board[i][j].isOccupied()) {
+					if(this.board[i][j].getOrientation() == BoatOrientation.NONE){
+						System.out.print("|  ◙  ");
 						continue;
 					}
 
-					if(this.board[i][j].isEdge()){
-						switch(this.board[i][j].getOrientation()){
+					if(!this.board[i][j].isEdge()) {
+						System.out.print("|  █  ");
+						continue;
+					}
+
+					if(this.board[i][j].isEdge()) {
+						switch(this.board[i][j].getOrientation()) {
+
 							case HORIZONTAL:
-								if(this.board[i][j].isFirst()){
-									System.out.printf("|  ◄  ");
-								}
-								else{
-									System.out.printf("|  ►  ");
-								}
+
+								if(this.board[i][j].isFirst())
+									System.out.print("|  ◄  ");
+
+								else
+									System.out.print("|  ►  ");
+
 								break;
+
 							case VERTICAL:
-								if(this.board[i][j].isFirst()){
-									System.out.printf("|  ▲  ");
-								}
-								else{
-									System.out.printf("|  ▼  ");
-								}
+								if(this.board[i][j].isFirst())
+									System.out.print("|  ▲  ");
+
+								else
+									System.out.print("|  ▼  ");
+
 								break;
 						}
-
 					}
-
 				}
-
 			}
+
 			System.out.print("|");
 			System.out.println();
 		}
 	}
-	
 }

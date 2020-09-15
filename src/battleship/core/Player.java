@@ -2,8 +2,7 @@ package battleship.core;
 
 /**
  * Player is the class that have access to each individual players data
- *
- * @author Diógenes Dietrich de Morais
+ * 
  * @author Gustavo Reis Bauer
  * @since 1.0
  * @access public
@@ -89,7 +88,7 @@ public class Player {
 	 * @access private
 	 * 
 	 * */
-	private Board board;
+	private final Board board;
 
 	/**
 	 * Player is the default constructor of the class Player
@@ -103,13 +102,13 @@ public class Player {
 	 * 
 	 * */
 	public Player(String name) {
-		this.name   	= name;
-		this.board      = new Board();
-		this.myTurn 	= false;
-		this.score  	= 0;
-		this.wrongAttempts = 0;
+		this.board          = new Board();
+		this.name   	    = name;
+		this.myTurn 	    = false;
+		this.score  	    = 0;
+		this.wrongAttempts  = 0;
 		this.hitBoatsPoints = 0;
-		this.boatsPoints = 0;
+		this.boatsPoints    = 0;
 	}
 	
 	/**
@@ -125,8 +124,8 @@ public class Player {
 			this.score += BASE_POINTS;
 			return;
 		}
-		this.score += (BASE_POINTS / this.wrongAttempts);
 
+		this.score += (BASE_POINTS / this.wrongAttempts);
 	}
 
 	/**
@@ -292,6 +291,4 @@ public class Player {
 	public boolean shotPlayer(final Point point, final Player player) throws InvalidPosition, ShootedPoint {
 		return player.board.shot(point);
 	}
-
-
 }

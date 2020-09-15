@@ -18,7 +18,7 @@ public class Boat {
 	 * @access private
 	 *
 	 * */
-	private BoatType type;
+	private final BoatType type;
 	
 	/**
 	 * orientation is the direction where subsequent points will be placed on the board
@@ -28,7 +28,7 @@ public class Boat {
 	 * @access private
 	 *
 	 * */
-	private BoatOrientation orientation;
+	private final BoatOrientation orientation;
 	
 	/**
 	 * initialPoint is the first point where the boat will be placed(according to its size and direction)
@@ -38,7 +38,7 @@ public class Boat {
 	 * @access private
 	 * 
 	 * */
-	private Point initialPoint;
+	private final Point initialPoint;
 
 	/**
 	 * Main constructor to Boat class
@@ -116,5 +116,4 @@ public class Boat {
 	public Point getInitialPoint() {
 		return this.initialPoint;
 	}
-
 }

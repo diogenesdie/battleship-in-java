@@ -2,8 +2,7 @@ package battleship.core;
 
 /**
  * Point is the atomic part of the board
- *
- * @author Diógenes Dietrich de Morais
+ * 
  * @author Gustavo Reis Bauer
  * @since 1.0
  * @access public
@@ -111,7 +110,7 @@ public class Point {
 	 * @access public
 	 *
 	 * */
-	public Point(){
+	public Point() {
 		this.x = 0;
 		this.y = 0;
 		this.isOccupied = false;

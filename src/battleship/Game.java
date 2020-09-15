@@ -46,7 +46,7 @@ public class Game {
     private int instantiatedPlayers = 0;
 
     /**
-     * renderModel is responsible for rendering a model on the screen
+     * printModel is responsible for rendering a model on the screen
      *
      * @author Diógenes Dietrich de Morais
      * @since 1.0
@@ -55,13 +55,13 @@ public class Game {
      * @param path is the path of model
      *
      * */
-    private void renderModel(String path) throws Exception{
+    private void printModel(String path) throws Exception {
         BufferedReader buffRead = new BufferedReader(new FileReader(path));
         String line = "";
 
-        while ((line = buffRead.readLine()) != null) {
+        while ((line = buffRead.readLine()) != null)
             System.out.println(line);
-        }
+
 
         buffRead.close();
         System.out.println();
@@ -75,7 +75,7 @@ public class Game {
      * @access private
      *
      * */
-    private void okInput(){
+    private void okInput() {
         Scanner input = new Scanner(System.in);
 
         System.out.println("Pressione Enter para continuar.");
@@ -95,20 +95,21 @@ public class Game {
      * */
     private int verifyIntInput(){
         Scanner input = new Scanner(System.in);
-        boolean done = false;
-        int beReturn = 0;
+        boolean done  = false;
+        int retValue  = 0;
 
         while(!done) {
             try {
-                beReturn = input.nextInt();
+                retValue = input.nextInt();
                 done = true;
+
             } catch (InputMismatchException e) {
                 System.out.println("Você precisa digitar um número!");
                 input.nextLine();
             }
         }
 
-        return beReturn;
+        return retValue;
     }
 
     /**
@@ -122,10 +123,9 @@ public class Game {
      *
      * */
     private void swapBothTurns(final Player[] players){
-        for (Player player : players) {
+        for (final Player player : players) {
             player.swapTurn();
         }
-
     }
 
     /**
@@ -150,30 +150,33 @@ public class Game {
      *
      * @return if the user wants to continue or leave
      * */
-    public boolean mainMenu(){
+    public boolean mainMenu() {
         Scanner input = new Scanner(System.in);
         char op;
         System.out.println("Bem vindo à Batalha Naval\n");
 
         try {
-            renderModel(SHIP_MODEL_PATH);
-        }catch (Exception e){
-            System.out.println();
+            printModel(SHIP_MODEL_PATH);
+
+        } catch (Exception e){
+            e.printStackTrace();
         }
 
         System.out.println("INICIAR(1)                SAIR(0)");
-        do{
+
+        do {
             try {
                 op = input.nextLine().charAt(0);
-            }catch (StringIndexOutOfBoundsException stringIndexOutOfBoundsException){
+
+            } catch (StringIndexOutOfBoundsException e) {
                 op = '0';
             }
 
-            if(op!='0' && op!='1')
-                System.out.println("Opção Inválida");
-        }while(op!='0' && op!='1');
+            if(op != '0' && op != '1') System.out.println("Opção Inválida");
 
-        return op=='1';
+        } while(op != '0' && op != '1');
+
+        return op == '1';
     }
 
     /**
@@ -186,12 +189,12 @@ public class Game {
      * @return is the player's name
      *
      * */
-    public String getPlayerName(){
+    public String getPlayerName() {
         Scanner input = new Scanner(System.in);
 
         this.instantiatedPlayers++;
 
-        System.out.println("Informe o nome do Jogador "+this.instantiatedPlayers);
+        System.out.println("Informe o nome do Jogador " + this.instantiatedPlayers);
         System.out.print("--> ");
 
         return input.next();
@@ -225,14 +228,13 @@ public class Game {
      *
      * */
     public void createBoat(final Player player, final BoatType type, boolean isFirstBoat) {
-        if(!isFirstBoat)
-            this.clearScreen();
+        if(!isFirstBoat) this.clearScreen();
 
         Scanner input = new Scanner(System.in);
-        Point point = new Point();
-        Boat boat = null;
+        Point point   = new Point();
+        Boat boat     = null;
 
-        char orientation;
+        char orientation   = '\0';
         boolean verifyBoat = false;
 
         do {
@@ -242,39 +244,53 @@ public class Game {
             System.out.println("Escolha a coordenada Y para o Barco de " + type.getSize() + " espaços:");
             point.setY(this.verifyIntInput());
 
-            if(type.getSize()!=1) {
+            if(type.getSize() != 1) {
                 System.out.println("Escolha a orientação para o Barco de " + type.getSize() + " espaços:");
-                System.out.println("H = Horizontal\nV = Vertical");
+                System.out.println("h = Horizontal\nv = Vertical");
+
                 do {
                     try {
                         orientation = input.nextLine().toLowerCase().charAt(0);
-                    }catch (StringIndexOutOfBoundsException stringIndexOutOfBoundsException){
+
+                    } catch (StringIndexOutOfBoundsException e){
                         orientation = 'e';
                     }
-                    if (orientation == 'h') {
-                        boat = new Boat(type, BoatOrientation.HORIZONTAL, point);
-                    } else if (orientation == 'v') {
-                        boat = new Boat(type, BoatOrientation.VERTICAL, point);
-                    } else {
-                        System.out.println("Opção Inválida");
+
+                    switch (orientation) {
+                        case 'h':
+                            boat = new Boat(type, BoatOrientation.HORIZONTAL, point);
+                            break;
+
+                        case 'v':
+                            boat = new Boat(type, BoatOrientation.VERTICAL, point);
+                            break;
+
+                        default:
+                            System.out.println("Opção Inválida");
                     }
 
+
                 } while (orientation != 'h' && orientation != 'v');
-            }else{
+
+            }
+            else {
                 boat = new Boat(type, point);
             }
 
             try {
                 verifyBoat = player.addBoat(boat);
-            } catch (InvalidPosition | ArrayIndexOutOfBoundsException invalidPosition) {
+
+            } catch (InvalidPosition | ArrayIndexOutOfBoundsException e) {
                 System.out.println("Posição inválida para o barco!");
                 verifyBoat = false;
-            }catch (AlreadyHaveBoat alreadyHaveBoat){
+
+            } catch (AlreadyHaveBoat e) {
                 System.out.println("Já existe um barco nessa posição!");
                 verifyBoat = false;
             }
 
-        }while(!verifyBoat);
+        } while(!verifyBoat);
+
         player.getBoard().printBoardWithBoats();
         this.okInput();
     }
@@ -290,18 +306,17 @@ public class Game {
      *
      * */
     public void createAllBoats(final Player player){
-        int i = 0;
-
         this.createBoat(player, BoatType.LARGE, true);
-        for(i = 0; i<2; i++) {
+
+        for(int i = 0; i < 2; i++)
             this.createBoat(player, BoatType.BIG);
-        }
-        for(i = 0; i<3; i++) {
+
+        for(int i = 0; i < 3; i++)
             this.createBoat(player, BoatType.MEDIUM);
-        }
-        for(i = 0; i<4; i++) {
+
+        for(int i = 0; i < 4; i++)
             this.createBoat(player, BoatType.SMALL);
-        }
+
         this.showBoardWithBoats(player);
     }
 
@@ -317,7 +332,9 @@ public class Game {
      * */
     public void showBoardWithBoats(final Player player){
         this.clearScreen();
-        System.out.println("Este é seu tabuleiro "+player.getName()+":");
+
+        System.out.println("Este é seu tabuleiro " + player.getName() + ":");
+
         player.getBoard().printBoardWithBoats();
         this.okInput();
     }
@@ -335,17 +352,19 @@ public class Game {
      * @return if the player shot a boat
      * */
     public void shoot(final Player shoot, final Player beShot){
-        this.clearScreen();
-        Point point = new Point();
-        final Player[] players = {shoot, beShot};
+        final Point point      = new Point();
+        final Player[] players = { shoot, beShot };
 
         boolean verifyShot = false;
-        boolean isBoat = false;
+        boolean isBoat     = false;
+
+        this.clearScreen();
 
         do {
             verifyShot = false;
             beShot.getBoard().printBoard();
-            System.out.println("Vez de "+shoot.getName()+" atirar!");
+
+            System.out.println("Vez de " + shoot.getName() + " atirar!");
             System.out.println("Informe a coordenada de X para o tiro:");
             point.setX(this.verifyIntInput());
 
@@ -355,18 +374,23 @@ public class Game {
             try {
                 isBoat = shoot.shotPlayer(point, beShot);
                 verifyShot = true;
-            } catch (InvalidPosition invalidPosition) {
+
+            } catch (InvalidPosition e) {
                 System.out.println("Posição inválida para o tiro!");
-            } catch (ShootedPoint shootedPoint) {
+
+            } catch (ShootedPoint e) {
                 System.out.println("Você já atirou nesse ponto!");
             }
 
             if(!isBoat && verifyShot){
                 System.out.println("Você acertou água!");
+
                 beShot.getBoard().printBoard();
                 shoot.incrementWrongAttempts();
+
                 this.swapBothTurns(players);
                 this.okInput();
+
                 return;
             }
 
@@ -376,19 +400,15 @@ public class Game {
                 beShot.getBoard().printBoard();
                 beShot.incrementHitBoatsPoints();
                 shoot.incrementScore();
+
                 shoot.resetWrongAttempts();
                 this.okInput();
 
-                if(beShot.getHitBoatsPoints()==beShot.getBoatsPoints())
-                    return;
-
+                if(beShot.getHitBoatsPoints() == beShot.getBoatsPoints()) return;
 
                 verifyShot = false;
             }
 
-
-        }while(!verifyShot);
-
+        } while(!verifyShot);
     }
-
 }
