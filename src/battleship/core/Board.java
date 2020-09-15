@@ -192,8 +192,10 @@ public class Board {
 	 * @since 1.0
 	 * @access public
 	 *
+	 * @param withBoats is if the boats should be displayed
+	 *
 	 * */
-	public void printBoard() {
+	public void printBoard(boolean withBoats) {
 		System.out.print("      |");
 		for(int i = 0; i < 10; i++){
 			System.out.print("  " + i + "  |");
@@ -205,17 +207,18 @@ public class Board {
 					System.out.print("|  " + i + "  ");
 				}
 
-				if(!this.board[i][j].isShot()) {
+
+				if((this.board[i][j].isShot() && !this.board[i][j].isOccupied()) || (!this.board[i][j].isOccupied() && withBoats)) {
 					System.out.print("|  ~  ");
 					continue;
 				}
 
-				if(this.board[i][j].isShot() && !this.board[i][j].isOccupied()) {
+				if(!this.board[i][j].isShot() && !withBoats) {
 					System.out.print("|  ~  ");
 					continue;
 				}
 
-				if(this.board[i][j].isOccupied() && this.board[i][j].isShot()) {
+				if(this.board[i][j].isOccupied() && (this.board[i][j].isShot() || withBoats)) {
 					if(this.board[i][j].getOrientation() == BoatOrientation.NONE) {
 						System.out.print("|  ◙  ");
 						continue;
@@ -256,69 +259,4 @@ public class Board {
 		}
 	}
 
-	/**
-	 * printBoard renders the board on screen with all boats of the player
-	 *
-	 * @author Diógenes Dietrich de Morais
-	 * @since 1.0
-	 * @access public
-	 *
-	 * */
-	public void printBoardWithBoats() {
-		System.out.print("      |");
-		for(int i = 0; i < 10; i++){
-			System.out.print("  " + i + "  |");
-		}
-		System.out.println();
-		for(int i = 0; i < this.board.length; i++) {
-			for(int j = 0; j < this.board[i].length; j++) {
-
-				if(j == 0) System.out.print("|  " + i + "  ");
-
-				if(!this.board[i][j].isOccupied()) {
-					System.out.printf("|  ~  ");
-					continue;
-				}
-
-				if(this.board[i][j].isOccupied()) {
-					if(this.board[i][j].getOrientation() == BoatOrientation.NONE){
-						System.out.print("|  ◙  ");
-						continue;
-					}
-
-					if(!this.board[i][j].isEdge()) {
-						System.out.print("|  █  ");
-						continue;
-					}
-
-					if(this.board[i][j].isEdge()) {
-						switch(this.board[i][j].getOrientation()) {
-
-							case HORIZONTAL:
-
-								if(this.board[i][j].isFirst())
-									System.out.print("|  ◄  ");
-
-								else
-									System.out.print("|  ►  ");
-
-								break;
-
-							case VERTICAL:
-								if(this.board[i][j].isFirst())
-									System.out.print("|  ▲  ");
-
-								else
-									System.out.print("|  ▼  ");
-
-								break;
-						}
-					}
-				}
-			}
-
-			System.out.print("|");
-			System.out.println();
-		}
-	}
 }

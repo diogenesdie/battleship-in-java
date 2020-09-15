@@ -291,7 +291,7 @@ public class Game {
 
         } while(!verifyBoat);
 
-        player.getBoard().printBoardWithBoats();
+        player.getBoard().printBoard(true);
         this.okInput();
     }
 
@@ -335,7 +335,7 @@ public class Game {
 
         System.out.println("Este é seu tabuleiro " + player.getName() + ":");
 
-        player.getBoard().printBoardWithBoats();
+        player.getBoard().printBoard(true);
         this.okInput();
     }
 
@@ -362,7 +362,7 @@ public class Game {
 
         do {
             verifyShot = false;
-            beShot.getBoard().printBoard();
+            beShot.getBoard().printBoard(false);
 
             System.out.println("Vez de " + shoot.getName() + " atirar!");
             System.out.println("Informe a coordenada de X para o tiro:");
@@ -385,7 +385,7 @@ public class Game {
             if(!isBoat && verifyShot){
                 System.out.println("Você acertou água!");
 
-                beShot.getBoard().printBoard();
+                beShot.getBoard().printBoard(false);
                 shoot.incrementWrongAttempts();
 
                 this.swapBothTurns(players);
@@ -397,7 +397,7 @@ public class Game {
             if(isBoat && verifyShot){
                 System.out.println("Você atingiu um barco!");
 
-                beShot.getBoard().printBoard();
+                beShot.getBoard().printBoard(false);
                 beShot.incrementHitBoatsPoints();
                 shoot.incrementScore();
 
