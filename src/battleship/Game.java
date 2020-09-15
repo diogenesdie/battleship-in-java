@@ -16,6 +16,16 @@ import java.util.Scanner;
  * */
 public class Game {
     /**
+     * input is the Scanner instance that will be used through all the class
+     *
+     * @author Gustavo Reis Bauer
+     * @since 1.0
+     * @access private
+     *
+     */
+    private final Scanner input = new Scanner(System.in);
+
+    /**
      * CLEANING_LINES is a constant which holds the number of lines necessary to clear the screen
      *
      * @author Diógenes Dietrich de Morais
@@ -94,18 +104,17 @@ public class Game {
      * @return the input value
      * */
     private int verifyIntInput(){
-        Scanner input = new Scanner(System.in);
         boolean done  = false;
         int retValue  = 0;
 
         while(!done) {
             try {
-                retValue = input.nextInt();
+                retValue = this.input.nextInt();
                 done = true;
 
             } catch (InputMismatchException e) {
                 System.out.println("Você precisa digitar um número!");
-                input.nextLine();
+                this.input.nextLine();
             }
         }
 
@@ -151,7 +160,6 @@ public class Game {
      * @return if the user wants to continue or leave
      * */
     public boolean mainMenu() {
-        Scanner input = new Scanner(System.in);
         char op;
         System.out.println("Bem vindo à Batalha Naval\n");
 
@@ -166,7 +174,7 @@ public class Game {
 
         do {
             try {
-                op = input.nextLine().charAt(0);
+                op = this.input.nextLine().charAt(0);
 
             } catch (StringIndexOutOfBoundsException e) {
                 op = '0';
@@ -190,14 +198,12 @@ public class Game {
      *
      * */
     public String getPlayerName() {
-        Scanner input = new Scanner(System.in);
-
         this.instantiatedPlayers++;
 
         System.out.println("Informe o nome do Jogador " + this.instantiatedPlayers);
         System.out.print("--> ");
 
-        return input.next();
+        return this.input.next();
     }
 
     /**
@@ -230,7 +236,6 @@ public class Game {
     public void createBoat(final Player player, final BoatType type, boolean isFirstBoat) {
         if(!isFirstBoat) this.clearScreen();
 
-        Scanner input = new Scanner(System.in);
         Point point   = new Point();
         Boat boat     = null;
 
@@ -250,7 +255,7 @@ public class Game {
 
                 do {
                     try {
-                        orientation = input.nextLine().toLowerCase().charAt(0);
+                        orientation = this.input.nextLine().toLowerCase().charAt(0);
 
                     } catch (StringIndexOutOfBoundsException e){
                         orientation = 'e';
